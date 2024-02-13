@@ -1,26 +1,62 @@
-import React from 'react' // 👈 you'll need the reducer hook
+import React, { useReducer, useEffect } from 'react' // 👈 you'll need the reducer hook
 
 // 👇 these are the types of actions that can change state
 const CHANGE_INPUT = 'CHANGE_INPUT'
 const RESET_FORM = 'RESET_FORM'
 
 // 👇 create your initial state object here
+const initialState = {
+  authorName: '',
+  quoteText: '',
+  buttonDisabled: true,
+}
 
 // 👇 create your reducer function here
+const reducer = (state, action) => {
+  switch (action.type) {
+    case CHANGE_INPUT: {
+      const newState = {
+        ...state,
+        [action.payload.name]: action.payload.value
+      };
 
-export default function TodoForm({ createQuote = () => { } }) {
+      newState.buttonDisabled = state.authorName === '' || state.quoteText === '' ? true : false;
+
+      return newState;
+    }
+    case RESET_FORM: {
+      break;
+    }
+    default: {
+      return state;
+    }
+  }
+}
+
+export default function TodoForm({ createQuote }) {
   // 👇 use the reducer hook to spin up state and dispatch
+  const [state, dispatch] = useReducer(reducer, initialState)
 
-  const onChange = () => {
+  const onChange = (e) => {
     // 👇 implement
+    const name = e.target.name
+    const value = e.target.value
+    dispatch({ type: CHANGE_INPUT, payload: { name, value } })
   }
   const resetForm = () => {
     // 👇 implement
+    dispatch({ type: RESET_FORM })
   }
-  const onNewQuote = () => {
+  const onNewQuote = (e) => {
     // 👇 implement
+    e.preventDefault();
+    createQuote({ authorName: state.authorName, quoteText: state.quoteText })
     resetForm()
   }
+
+  useEffect(() => {
+    console.log(state)
+  })
 
   // 👇 some props are missing in the JSX below:
   return (
@@ -45,6 +81,7 @@ export default function TodoForm({ createQuote = () => { } }) {
       <label><span>Create quote:</span>
         <button
           role='submit'
+          // disabled={state.buttonDisabled}
         >DO IT!</button>
       </label>
     </form>

@@ -6,10 +6,10 @@ export default function Quotes({
   // 👇 although you can remove the default parameters of the Quotes component after you're done
   highlightedQuote = 1,
   displayAllQuotes = true,
-  deleteQuote = () => { },
-  editQuoteAuthenticity = () => { },
-  setHighlightedQuote = () => { },
-  toggleVisibility = () => { },
+  deleteQuote,
+  editQuoteAuthenticity,
+  setHighlightedQuote,
+  toggleVisibility, 
 }) {
 
   return (
